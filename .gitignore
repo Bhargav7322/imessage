@@ -1,6 +1,6 @@
 .env
 
-Backend/src/index.js
+# Backend/src/index.js
 
 # Logs
 logs
