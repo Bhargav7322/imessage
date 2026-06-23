@@ -30,7 +30,7 @@ app.use(cors({origin:FRONTEND_URL,credentials:true}));
 app.use(clerkMiddleware());
 
 app.get("/health",(req,res)=>{
-  const {message,image,video} = req.body
+  // const {message,image,video} = req.body
   res.status(200).json({message:"Server is healthy"})
 })
 
