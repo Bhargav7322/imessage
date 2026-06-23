@@ -4,6 +4,8 @@ import connectDB from "./lib/db.js"
 import cors from "cors";
 import User from "./models/user.model.js";
 import { clerkMiddleware } from '@clerk/express'
+import fs from "fs";
+import path from "path";  
 
 const app = express();
 import dns from "node:dns";
@@ -13,6 +15,8 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const PORT = process.env.PORT 
 const FRONTEND_URL = process.env.FRONTEND_URL
+
+const publicDir = path.join(process.cwd(), 'public');
 
 // console.log("PORT =", process.env.PORT);
 // console.log("MONGODB_URL =", process.env.MONGODB_URL);
@@ -29,6 +33,12 @@ app.get("/health",(req,res)=>{
   const {message,image,video} = req.body
   res.status(200).json({message:"Server is healthy"})
 })
+
+if(fs.existsSync(publicDir)){
+app.use(express.static(publicDir))
+app.get("/{*any}",(req,res,next)=>{
+  res.sendFile(path.join(publicDir, 'index.html'), (err) => next(err));
+})}
 
 app.listen(PORT, () => {
   connectDB();
