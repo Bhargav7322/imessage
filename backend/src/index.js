@@ -30,7 +30,6 @@ app.use(cors({origin:FRONTEND_URL,credentials:true}));
 app.use(clerkMiddleware());
 
 app.get("/health",(req,res)=>{
-  // const {message,image,video} = req.body
   res.status(200).json({message:"Server is healthy"})
 })
 
@@ -43,6 +42,8 @@ app.get("/{*any}",(req,res,next)=>{
 app.listen(PORT, () => {
   connectDB();
   console.log("Server is running on portnumber " + PORT)
+  
+  if(process.env.NODE_ENV === "production")job.start()
 });
 
 
