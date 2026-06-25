@@ -25,6 +25,7 @@ const publicDir = path.join(process.cwd(), 'public');
 //   console.log("Server is running on port " + PORT);
 // });
 
+app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }),clerkWebhook);
 app.use(express.json());
 app.use(cors({origin:FRONTEND_URL,credentials:true}));
 app.use(clerkMiddleware());

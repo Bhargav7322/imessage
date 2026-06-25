@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-    <h1>Hello, Vite + React!</h1>
+    <h1>Hello, Come Here And Waste Your Time!</h1>
     <header>
         <Show when="signed-out">
           <SignInButton mode="modal" />
