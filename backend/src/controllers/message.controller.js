@@ -114,6 +114,7 @@ export async function sendMessage(req, res) {
     await newMessage.save();
 
     // for real time send message so we add socket.io
+    // two type socket.io for backend and socket.io-client for frontend
 
     res.status(201).json(newMessage);
   } catch (error) {

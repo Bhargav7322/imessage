@@ -1,0 +1,14 @@
+import exprss from "express";
+import http from "http";
+import { Server } from "socket.io";
+
+const app =  express()
+const server = http.createServer(app)
+
+const allwedorigin = process.env.FRONTEND_URL || "http://localhost:5173"
+ 
+const io = new Server(server,{cors:{origin:{allwedOrigin}}})
+
+io.on("connection",(socket)=>{
+    const userId =  socket.handshake.query.userId
+})

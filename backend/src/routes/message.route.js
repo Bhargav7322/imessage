@@ -4,6 +4,7 @@ import { protectRoute } from "../middleware/auth.middleware.js"
 import { getConversationForSidebar } from "../controllers/message.controller.js"
 import { getMessages } from "../controllers/message.controller.js"
 import { upload } from "../middleware/upload.middlewware.js"
+import { sendMessage } from "../controllers/message.controller.js"
 
 const router = express.Router()
 
