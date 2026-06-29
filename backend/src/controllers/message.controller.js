@@ -69,54 +69,55 @@ export async function getConversationForSidebar(req, res) {
 export async function getMessages(req, res) {
   try {
     const { id: userToChatId } = req.params;
-    const myId = req.user_id
+    const myId = req.user_id;
 
     const messages = await Message.find({
-        $or:[
-            {senderId:myId,receiverId:userToChatId},
-            {senderId:userToChatId,receiverId:myId}
-        ]
-    }).sort({createdAt:1})
+      $or: [
+        { senderId: myId, receiverId: userToChatId },
+        { senderId: userToChatId, receiverId: myId },
+      ],
+    }).sort({ createdAt: 1 });
   } catch (error) {
-    console.error("Error in getMessages:",error.message)
-    res.status(500).json({message:"Internal server error"})
+    console.error("Error in getMessages:", error.message);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 
-export async function sendMessage(req,res) {
-    try {
-        const {text} = req.body
-        const {id:receiverId} = req.params
-        const senderId = req.user_id
+export async function sendMessage(req, res) {
+  try {
+    const { text } = req.body;
+    const { id: receiverId } = req.params;
+    const senderId = req.user_id;
 
-        let imageUrl
-        let videoUrl
+    let imageUrl;
+    let videoUrl;
 
-        if(req.file){
-            if(!hasImageKitConfig()){
-                return res.status(500).json({message:"Media upload is not configured"})
-            }
-      const url = await uploadChatMedia(req.file)
-      if(req.file.mimetype.startsWith("video/"))videoUrl = url
-      else imageUrl = url
+    if (req.file) {
+      if (!hasImageKitConfig()) {
+        return res
+          .status(500)
+          .json({ message: "Media upload is not configured" });
+      }
+      const url = await uploadChatMedia(req.file);
+      if (req.file.mimetype.startsWith("video/")) videoUrl = url;
+      else imageUrl = url;
     }
- 
-     const newMessage = new Message({
-        senderId,
-        receiverId,
-        text,
-        image:imageUrl,
-        video:videoUrl,
-     })
 
-     await newMessage.save()
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      text,
+      image: imageUrl,
+      video: videoUrl,
+    });
 
-// for real time send message so we add socket.io
+    await newMessage.save();
 
-     res.status(201).json(newMessage)
-    } catch (error) {
-        console.error(" Error:",error.message)
-    res.status(500).json({message:"File not upload"})
-    }
-    
-}                                                       
+    // for real time send message so we add socket.io
+
+    res.status(201).json(newMessage);
+  } catch (error) {
+    console.error(" Error in sendMessage:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
