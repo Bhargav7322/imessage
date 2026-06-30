@@ -10,9 +10,9 @@ import job from "./lib/corn.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js"
+import {app,server} from "./lib/socket.js"
 
-
-const app = express();
+// const app = express();
 import dns from "node:dns";
 import { server } from "./lib/socket.js";
 

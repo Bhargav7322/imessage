@@ -5,9 +5,9 @@ import { Server } from "socket.io";
 const app = express();
 const server = http.createServer(app);
 
-const allwedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
 
-const io = new Server(server, { cors: { origin: { allwedOrigin } } });
+const io = new Server(server, { cors: { origin: { allowedOrigin } } });
 
 function getReceiverSocketId(userId){ 
     return userSocketMap[userId]
@@ -16,6 +16,7 @@ function getReceiverSocketId(userId){
 // online users map = {userId: socketId}
 
 const userSocketMap = {};
+
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
 
