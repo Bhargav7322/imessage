@@ -14,7 +14,6 @@ import {app,server} from "./lib/socket.js"
 
 // const app = express();
 import dns from "node:dns";
-import { server } from "./lib/socket.js";
 
 // set custom DNS servers
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
