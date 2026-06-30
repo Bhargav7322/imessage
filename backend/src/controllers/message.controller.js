@@ -2,6 +2,7 @@ import express from "express";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 import { upload } from "../middleware/upload.middlewware.js";
+import { getReceiverSocketId } from "../lib/socket.js";
 
 export async function getUsersForSidebar(req, res) {
   try {
@@ -112,6 +113,14 @@ export async function sendMessage(req, res) {
     });
 
     await newMessage.save();
+
+    const reciverSocketId = getReceiverSocketId(receiverId)
+
+    //only send the message in realtime if user is online 
+
+    if(reciverSocketId){
+      io.to(reciverSocketId.emit("newMessage",newMessage))
+    }
 
     // for real time send message so we add socket.io
     // two type socket.io for backend and socket.io-client for frontend

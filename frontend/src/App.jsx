@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-    <h1>Hello, Come Here And Waste Your Time!</h1>
+    <h1>App</h1>
     <header>
         <Show when="signed-out">
           <SignInButton mode="modal" />
