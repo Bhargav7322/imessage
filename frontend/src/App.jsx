@@ -11,9 +11,6 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
-
-  if (!isLoaded) return <PageLoader />;
-
   // this is one also working perfectly this is simple distucturing and work correctly but this is not optimized way to use zustand store
   // option 1
   // const {checkAuth,isCheckingAuth,clearAuth} = useAuthStore();

@@ -24,6 +24,8 @@ function ChatPage() {
     useSelectedConversation();
 
   useEffect(() => {
+      console.log("ChatPage useEffect");
+  console.log(getUsers);
     getUsers();
     getConversations();
   }, [getConversations, getUsers]);
