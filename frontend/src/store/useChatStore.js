@@ -1,10 +1,12 @@
 import  {create} from "zustand";
+import {persist} from "zustand/middleware";
 import { axiosInstance } from "../lib/axios";
 import { io } from "socket.io-client";
 import { useAuthStore } from "./useAuthStore";
 import {toast} from "react-hot-toast"
 
-export const useChatStore = create((set,get) => ({
+export const useChatStore = create(persist(
+  (set,get) => ({
     users:[],
     conversations:[],
     messages:[],
@@ -138,4 +140,7 @@ try {
   set({isSendingMedia:false})
 }
 
-}} ));
+}},{
+  name:"imessage-chat-store",
+  partialize:(state) => ({isSoundEnabled:state.isSoundEnabled})
+} )));
