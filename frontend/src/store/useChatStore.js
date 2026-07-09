@@ -22,7 +22,6 @@ export const useChatStore = create(
         getUsers: async () => {
           set({ isUsersLoading: true });
           try {
-            console.log("ChatPage useEffect111");
             const res = await axiosInstance.get("/messages/users");
             set((state) => ({
               users: res.data,
@@ -42,7 +41,7 @@ export const useChatStore = create(
         getConversations: async () => {
           set({ isConversationsLoading: true });
           try {
-            const res = await axiosInstance.get("/messages/conversations");
+            const res = await axiosInstance.get("/messages/conversation");
             set({ conversations: res.data });
           } catch (error) {
             console.error("Error in getConversations:", error.message);
@@ -143,11 +142,16 @@ export const useChatStore = create(
             set({ isSendingMedia: false });
           }
         },
-      },
+      }
+    ),
       {
         name: "imessage-chat-store",
         partialize: (state) => ({ isSoundEnabled: state.isSoundEnabled }),
       }
-    ),
   ),
 );
+
+
+
+
+
