@@ -19,6 +19,6 @@ router.use(protectRoute)
 router.get("/users",getUsersForSidebar)
 router.get("/conversation",getConversationForSidebar)
 router.get("/:id",getMessages)
-router.post("/send/:id",upload.array("media",4),sendMessage)
+router.post("/send/:id",upload.array("media"),sendMessage)
 
 export default router
