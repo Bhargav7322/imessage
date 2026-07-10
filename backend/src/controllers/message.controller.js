@@ -88,7 +88,7 @@ export async function sendMessage(req, res) {
   try {
     const { text } = req.body;
     const { id: receiverId } = req.params;
-    const senderId = req.user_id;
+    const senderId = req.user._id;
 
     let imageUrl;
     let videoUrl;

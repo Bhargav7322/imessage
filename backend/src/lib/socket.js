@@ -5,12 +5,14 @@ import { Server } from "socket.io";
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5175";
 
-const io = new Server(server, { cors: { origin: { allowedOrigin } } });
+const io = new Server(server, {
+  cors: { origin: { allowedOrigin, credentials: true } },
+});
 
-function getReceiverSocketId(userId){ 
-    return userSocketMap[userId]
+function getReceiverSocketId(userId) {
+  return userSocketMap[userId];
 }
 
 // online users map = {userId: socketId}
@@ -32,4 +34,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export{server,app,io,getReceiverSocketId}
+export { server, app, io, getReceiverSocketId };
