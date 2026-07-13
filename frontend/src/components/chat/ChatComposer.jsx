@@ -1,5 +1,5 @@
 import { Button, TextArea } from "@heroui/react";
-import { ImageIcon, LoaderIcon, SendHorizontalIcon } from "lucide-react";
+import { PaperclipIcon, LoaderIcon, SendHorizontalIcon } from "lucide-react";
 import { useRef } from "react";
 import useKeyboardSound from "../../hooks/useKeyboardSound";
 import { useChatStore } from "../../store/useChatStore";
@@ -12,9 +12,12 @@ export function ChatComposer() {
   const isSendingMedia = useChatStore((state) => state.isSendingMedia);
   const sendTextMessage = useChatStore((state) => state.sendTextMessage);
   const setComposerText = useChatStore((state) => state.setComposerText);
+  const emitTyping = useChatStore((state) => state.emitTyping);
+  const emitStopTyping = useChatStore((state) => state.emitStopTyping);
   const { activeConversationId } = useSelectedConversation();
   const { playRandomKeyStrokeSound } = useKeyboardSound();
   const mediaInputRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
   const playSoundIfEnabled = () => {
     if (isSoundEnabled) playRandomKeyStrokeSound();
@@ -28,6 +31,12 @@ export function ChatComposer() {
   const handleComposerTextChange = (event) => {
     setComposerText(event.target.value);
     playSoundIfEnabled();
+
+    emitTyping(activeConversationId);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      emitStopTyping(activeConversationId);
+    }, 1500);
   };
 
   const handleMediaPick = async (event) => {
@@ -35,10 +44,7 @@ export function ChatComposer() {
     event.target.value = "";
     if (!file) return;
 
-    const didSendMessage = await sendMediaMessage({
-      conversationId: activeConversationId,
-      file,
-    });
+    const didSendMessage = await sendMediaMessage(activeConversationId, file);
 
     if (didSendMessage) playSoundIfEnabled();
   };
@@ -59,7 +65,7 @@ export function ChatComposer() {
         <input
           ref={mediaInputRef}
           type="file"
-          accept="image/*,video/*"
+          accept="*/*"
           className="sr-only"
           disabled={isSendingMedia}
           tabIndex={-1}
@@ -73,7 +79,7 @@ export function ChatComposer() {
           className="size-9 shrink-0 touch-manipulation self-end text-accent"
           onPress={() => mediaInputRef.current?.click()}
         >
-          <ImageIcon className="size-5 sm:size-6" strokeWidth={2} />
+          <PaperclipIcon className="size-5 sm:size-6" strokeWidth={2} />
         </Button>
         <TextArea
           fullWidth

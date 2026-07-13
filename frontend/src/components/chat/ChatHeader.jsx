@@ -2,22 +2,17 @@ import { Avatar, Button } from "@heroui/react";
 import { ChevronLeftIcon, Volume2Icon, VolumeXIcon, XIcon } from "lucide-react";
 import { AppLogo} from "../auth/AppLogo";
 import { AvatarWithOnlineIndicator } from "./AvatarWithOnlineIndicator";
-
 import {ThemePresetPicker} from "../auth/ThemePresetPicker";
-
 import { ThemeToggle } from "../auth/ThemeToggle";
 import { WallpaperPicker } from "../auth/WallpaperPicker";
-
 import { useChatStore } from "../../store/useChatStore";
 import { useSelectedConversation } from "../../hooks/useSelectedConversation";
-
 export function ChatHeader() {
   const isSoundEnabled = useChatStore((state) => state.isSoundEnabled);
   const setActiveConversationId = useChatStore((state) => state.setActiveConversationId);
   const setSoundEnabled = useChatStore((state) => state.setSoundEnabled);
-
+  const typingUsers = useChatStore((state) => state.typingUsers);
   const { activeConversation, isLargeScreen } = useSelectedConversation();
-
   return (
     <header className="sticky top-0 z-10 flex shrink-0 flex-wrap items-center gap-1 border-b border-border px-1.5 py-1.5 sm:gap-2 sm:px-2 sm:py-2">
       {activeConversation && !isLargeScreen ? (
@@ -31,7 +26,6 @@ export function ChatHeader() {
           <ChevronLeftIcon className="size-6" strokeWidth={2.25} />
         </Button>
       ) : null}
-
       {activeConversation ? (
         <>
           <AvatarWithOnlineIndicator isOnline={activeConversation.peer.isOnline ?? true}>
@@ -45,13 +39,14 @@ export function ChatHeader() {
               </Avatar.Fallback>
             </Avatar>
           </AvatarWithOnlineIndicator>
-
           <div className="flex-1 text-center sm:text-left">
             <p className="truncate text-[15px] font-semibold leading-tight">
               {activeConversation.peer.name}
             </p>
             <p className="truncate text-xs text-muted">
-              {activeConversation.peer.isOnline ? (
+              {typingUsers.includes(activeConversation.id) ? (
+                <span className="font-medium text-accent italic">Typing...</span>
+              ) : activeConversation.peer.isOnline ? (
                 <span className="font-medium text-success">Online</span>
               ) : (
                 "Offline"
@@ -67,15 +62,12 @@ export function ChatHeader() {
           </div>
         </div>
       )}
-
       <div className="ml-auto flex max-w-full shrink-0 flex-wrap items-center justify-end gap-0.5 sm:gap-1">
         <div className="hidden min-[400px]:contents">
           <WallpaperPicker />
           <ThemePresetPicker />
         </div>
-
         <ThemeToggle />
-
         <Button
           variant="ghost"
           size="sm"
@@ -90,7 +82,6 @@ export function ChatHeader() {
             <VolumeXIcon className="size-5.5" strokeWidth={2} aria-hidden />
           )}
         </Button>
-
         {activeConversation ? (
           <Button
             variant="ghost"
@@ -107,4 +98,3 @@ export function ChatHeader() {
     </header>
   );
 }
-

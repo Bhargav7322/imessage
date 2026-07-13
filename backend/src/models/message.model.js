@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const messageSchema = new mongoose.Schema(
   {
     senderId: {
@@ -16,9 +15,15 @@ const messageSchema = new mongoose.Schema(
       type: String,
     },
     image: {
-      type: String, 
+      type: String,
     },
     video: {
+      type: String,
+    },
+    audio: {
+      type: String,
+    },
+    document: {
       type: String,
     },
   },
